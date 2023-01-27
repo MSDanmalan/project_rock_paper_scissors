@@ -2,12 +2,13 @@
 
 let playerSelection
 let computerSelection
-
+let buttonPressed
+let playerScore = 0
+let computerScore = 0
 // generate a function that will randomly return either 'rock, paper or scissors
 
 function getComputerChoice() {
     let generateChoice = () => Math.floor(Math.random() * 3)+1
-
     if(generateChoice() === 1){
         return 'rock'
     }
@@ -18,33 +19,56 @@ function getComputerChoice() {
         return 'scissors'
     }
 }
-
 // generate a function that plays a single round
-function playRound(playerSelection = prompt('Rock Paper Scissors'), 
+function playRound(playerSelection = buttonPressed, 
 computerSelection = getComputerChoice()) {
-
-   let caseInsensitive = playerSelection.toLowerCase()
-
-    playerSelection = caseInsensitive
-
-    if(playerSelection === computerSelection){
+    if (playerScore === 5 || computerScore === 5) {
+        return displayWinner()
+    }
+    else if(playerSelection === computerSelection){
         return 'It\'s a tie!'
     }
     else if(playerSelection === 'rock' && computerSelection === 'scissors' ||
              playerSelection === 'paper' && computerSelection === 'rock' ||
              playerSelection === 'scissors' && computerSelection === 'paper') {
+        playerResult.textContent = ++playerScore
         return `You win! ${playerSelection} beats ${computerSelection}` 
     }
     else if(computerSelection === 'rock' && playerSelection === 'scissors' ||
              computerSelection === 'paper' && playerSelection === 'rock' ||
              computerSelection === 'scissors' && playerSelection === 'paper') {
-        return `you lose ${computerSelection} beats ${playerSelection}` 
+        computerResult.textContent = ++computerScore
+        return `you lose ${computerSelection} beats ${playerSelection}`
     }
 };
 
-// generate a function that play a five round game
-function game() {
-    for (let i = 0; i < 5; i++){
-       console.log(playRound())
+const result = document.querySelector('#result')
+const rock = document.querySelector('#rock');
+rock.classList.add('btns')
+rock.addEventListener('click', () => {
+        buttonPressed = ('rock')
+        result.textContent = playRound(playerSelection, computerSelection)
     }
-};
+);
+const paper = document.querySelector('#paper')
+paper.addEventListener('click', () => {
+    buttonPressed = ('paper')
+    result.textContent = playRound(playerSelection, computerSelection)});
+const scissors = document.querySelector('#scissors')
+scissors.addEventListener('click', () => {
+    result.textContent = playRound(playerSelection, computerSelection)
+})
+
+let playerResult = document.querySelector('#playerResult')
+let computerResult = document.querySelector('#computerResult')
+let finalWinner = document.querySelector('#finalWinner')
+
+function displayWinner() {
+    if(playerScore === 5){
+        finalWinner.textContent = 'YOU WIN'
+    }
+    else if (computerScore === 5) {
+        finalWinner.textContent = 'YOU LOST'
+    }
+}
+
